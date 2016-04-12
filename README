@@ -1,0 +1,19 @@
+This repository holds all the code, auxiliary files, and intermediate files used in Ranjan & Sasselov 2016b. Using this material, one can replicate every one of the figures used in our paper, as well as run models of one's own formulation.
+
+The anticipated use cases are:
+1. Testing/Validating the findings of Ranjan & Sasselov 2016b
+2. Using the Ranjan & Sasselov radiative transfer model to compute UV surface fluence for user-defined atmospheres and surfaces.
+
+If making use of this code or the generated auxiliary files, please cite the descriptor paper:
+Ranjan, S. and Sasselov, Dimitar D. "Constraints on the Terrestrial Prebiotic UV Environment". Submitted to Astrobiology.
+
+Feedback welcome! Please send any comments or questions to: Sukrit Ranjan, sranjan@cfa.harvard.edu
+
+==========================
+===DESCRIPTION OF CONTENTS
+==========================
+
+
+==========================
+===HOW TO USE
+==========================
