@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 """
-
+Main code, runs the radiative transfer subroutines and writes output.
 """
 
 ########################
@@ -30,7 +30,7 @@ amu2g=1.66054e-24 #1 amu in g
 ########################
 gas='o3'
 multiples=np.array([1.e-5, 1.e-4, 1.e-3, 1.e-2, 1.e-1, 1., 1.e1, 1.e2, 1.e3, 1.e4, 1.e5, 1.e6, 1.e7, 1.e8])
-multiple=str(multiples[3])
+multiple=str(multiples[0])
 
 filename='gaslim/surface_intensities_'+gas+'limits_'+gas+'multiple='+multiple+'_a=newsnow_z=0' #name of file to write output, plot to
 

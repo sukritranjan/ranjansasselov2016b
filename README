@@ -1,19 +1,60 @@
 This repository holds all the code, auxiliary files, and intermediate files used in Ranjan & Sasselov 2016b. Using this material, one can replicate every one of the figures used in our paper, as well as run models of one's own formulation.
 
 The anticipated use cases are:
-1. Testing/Validating the findings of Ranjan & Sasselov 2016b
+1. Testing/validating the findings of Ranjan & Sasselov 2016b
 2. Using the Ranjan & Sasselov radiative transfer model to compute UV surface fluence for user-defined atmospheres and surfaces.
 
 If making use of this code or the generated auxiliary files, please cite the descriptor paper:
-Ranjan, S. and Sasselov, Dimitar D. "Constraints on the Terrestrial Prebiotic UV Environment". Submitted to Astrobiology.
+Ranjan, S. and Sasselov, Dimitar D. "Constraints on the Terrestrial Prebiotic UV Environment Relevant to Prebiotic Chemistry". Submitted to Astrobiology (2016).
 
-Feedback welcome! Please send any comments or questions to: Sukrit Ranjan, sranjan@cfa.harvard.edu
-
-==========================
-===DESCRIPTION OF CONTENTS
-==========================
-
+Questions and feedback welcome! Please send any comments or questions to: Sukrit Ranjan, sranjan@cfa.harvard.edu.
 
 ==========================
 ===HOW TO USE
 ==========================
+This section describes how to run our radiative transfer model to compute the fluxes and intensities at the surface of the 3.9 Ga Earth for a user-specified atmosphere and surface conditions.
+
+The workhorse of the code is radiativetransfer.py. At the top of this code is a block of configuration instructions. Here you can specify the desired surface conditions (solar zenith angle, surface type), the layers in the atmospheric model (number, thickness), the output file name, etc. Here, you also set pointers to three files. The first essentially tells the code which wavelength bins to compute radiative transfer over. The second gives the temperature, pressure, and number density of the atmosphere as a function of altitude. The third gives the concentrations of the atmospheric constituents as a function of altitude. Optimally, the composition and T/P profile files should have the same vertical abscissa, which should start at z=0 and extend past the uppermost of the layers you wish to compute radiative transfer in. form_atmospheric_profiles.py gives examples of how to format atmospheric profiles for this code. The folder RT_Settings.py shows templates of some of our commonly-used settings.
+
+Once you have configured your input files, set your options in radiativetransfer.py, and saved, you can run the code by typing 
+
+"python radiativetransfer.py"
+
+at the command prompt. The code will then generate a file giving various spectral parameters, including the TOA intensity, the surface flux, the surface actinic flux, the surface intensity, the diffuse and direct intensities at the surface. It will also print out diagnostic information to the prompt that will help you keep an eye on what the code is doing.
+
+NOTE: you may see the following warning when running the code: 
+"RuntimeWarning: overflow encountered in exp
+  result_cm=(2.*h*c**2./wav_cm**5.)*1./(np.exp(h*c/(wav_cm*kb*T))-1) #ergs/cm^3/s/steradian"
+  
+This occurs because the argument of the exponential in the blackbody source term is large for UV wavelengths and Earthlike temperatures, i.e. the thermal source is weak in the UV; Python is cautioning the user to be cautious of inaccuracies due to the resulting overflow. Functionally, this does not affect anything since the blackbody term is so small compared to the solar source term. If it concerns you, however, feel free to comment out the blackbody source term; this is a common approximation at solar wavelengths and in our sensitivity tests did not affect our results.
+
+
+
+==========================
+===CONTENTS
+==========================
+The code in this project fall into a few different categories:
+
+RADIATIVE TRANSFER MODEL
+---radiativetransfer.py: Top-level code, runs the radiative transfer calculation
+
+---twostream_toon_func.py: The computational core of the code, it is an implementation of two-stream radiative transfer based on the paper by Toon et al (1989). Go here to mess with how radiative transfer is computted, e.g. switching from quadrature closure to Eddington closure.
+
+---radiativetransfer_subfunctions.py: contains various helper functions used by the main code. 
+
+---radiativetransfer_albedo_subfunctions.py: contains helper functions that specifically help with computing the albedo (diffuse and direct).
+
+---cross_sections_subfunctions.py: contains helper functions that specifically help with how the cross-sections are computed.
+
+INPUT FILES
+---form_atmospheric_profiles.py: shows how we formed our atmospheric and spectral input files to the main code, from the metadata we collected from the literature and from other authors
+
+---extract_cross_sections.py: extracts the molecular cross-sections from the raw data files we collected from the MPI-Mainz database, computes Rayleigh scattering cross-sections
+
+INTERPRETATION/ANALYSIS
+---compute_uv_doses.py: computes the BEDs for different UV spectral fluences
+
+---Plot_XXX: these codes reproduce the various figures from our paper. 
+
+MISC
+---Cookbook.py: a few cookbook Python functions used by our various codes
