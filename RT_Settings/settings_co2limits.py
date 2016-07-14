@@ -10,7 +10,7 @@ multiple=str(multiples[0])
 filename='/CO2lim/surface_intensities_co2limits_co2multiple='+multiple+'_a=newsnow_z=0' #name of file to write output, plot to
 
 #TOA input, and comparison file.
-inputspectrafile='./LiteratureSpectra/general_spectral_input/' #TOA Stellar Input and Reference Spectra for Comparison
+inputspectrafile='./LiteratureSpectra/general_spectral_input.dat' #TOA Stellar Input and Reference Spectra for Comparison
 
 #Mixing ratio file
 N_species=8 #how many gas species are in our model?

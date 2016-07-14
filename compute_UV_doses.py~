@@ -26,10 +26,11 @@ def cm2inch(cm): #function to convert cm to inches; useful for complying with As
 ########################
 ###Decide which bits of the calculation will be run
 ########################
-plotactionspec=True #if true, plots the action spectra we are using.
+plotactionspec=False #if true, plots the action spectra we are using.
+plotactionspec_talk=False #if true, plots the action spectra we are using...but, optimized for a talk instead of a paper
 calculatealbaz=False #if true, generates the table for the albedo and zenith angle study
 calculateco2=False #if true, generates the table for the co2 study
-calculatealtgas=False #if true, generates the table for the alternate gas study
+calculatealtgas=True #if true, generates the table for the alternate gas study
 
 ########################
 ###Helper functions: I/O
@@ -344,6 +345,45 @@ if plotactionspec:
 	plt.tight_layout(rect=(0,0,1,1))
 	plt.savefig('./Plots/actionspectra.eps', orientation='portrait',papertype='letter', format='eps')
 
+
+if plotactionspec_talk:
+	#Set up wavelength scale
+	wave_left=np.arange(100., 500.)
+	wave_right=np.arange(101., 501.)
+	wave_centers=0.5*(wave_left+wave_right)
+	surf_int=np.ones(np.shape(wave_centers)) #for our purposes here, this is a thunk.
+
+	#Extract action spectra
+	wav_gly_193, actspec_gly_193=ump_glycosidic_photol(wave_left, wave_right, surf_int, 193., False, True)
+	wav_gly_230, actspec_gly_230=ump_glycosidic_photol(wave_left, wave_right, surf_int, 230., False, True)
+	wav_gly_254, actspec_gly_254=ump_glycosidic_photol(wave_left, wave_right, surf_int, 254., False, True)
+	wav_aqe_254, actspec_aqe_254=tricyano_aqe_prodrate(wave_left, wave_right, surf_int, 254., False, True)
+	wav_aqe_300, actspec_aqe_300=tricyano_aqe_prodrate(wave_left, wave_right, surf_int, 300., False, True)
+
+	#####Plot action spectra
+	#Initialize Figure
+	fig, (ax1)=plt.subplots(1, figsize=(10,9), sharex=True)
+	colorseq=iter(cm.rainbow(np.linspace(0,1,5)))
+	#Plot Data
+	ax1.plot(wav_gly_193,actspec_gly_193, linestyle='-',linewidth=3, color=next(colorseq), label=r'UMP-193')
+	ax1.plot(wav_gly_230,actspec_gly_230, linestyle='-',linewidth=3, color=next(colorseq), label=r'UMP-230')
+	ax1.plot(wav_gly_254,actspec_gly_254, linestyle='-',linewidth=3, color=next(colorseq), label=r'UMP-254')
+	ax1.plot(wav_aqe_254,actspec_aqe_254, linestyle='-',linewidth=3, color=next(colorseq), label=r'CuCN3-254')
+	ax1.plot(wav_aqe_300,actspec_aqe_300, linestyle='--',linewidth=3, color=next(colorseq), label=r'CuCN3-300')
+
+	#####Finalize and save figure
+	ax1.set_title(r'Action Spectra', fontsize=24)
+	ax1.set_xlim([180.,360.])
+	ax1.set_xlabel('nm',fontsize=24)
+	ax1.set_ylabel(r'Relative Sensitivity', fontsize=24)
+	ax1.set_yscale('log')
+	ax1.set_ylim([1e-6, 1e2])	
+	ax1.legend(bbox_to_anchor=[0, 1.1, 1,0.5], loc=3, ncol=2, mode='expand', borderaxespad=0., fontsize=24)
+	#ax1.legend(loc='upper right', ncol=1, fontsize=16)
+	ax1.xaxis.set_tick_params(labelsize=24)
+	ax1.yaxis.set_tick_params(labelsize=24)
+	plt.tight_layout(rect=(0,0,1,0.75))
+	plt.savefig('./TalkFigs/actionspectra.pdf', orientation='portrait',papertype='letter', format='pdf')
 ########################
 ###Set "base" values to normalize the alb-zen, co2, and alt-gas dosimeters by
 ########################

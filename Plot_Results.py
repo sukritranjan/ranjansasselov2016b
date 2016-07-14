@@ -31,10 +31,10 @@ plot_co2_limits=False #this time, using a fixed level of N2 and variable amounts
 plot_altgas_limits=False #fixed level of N2, various levels of other gases.
 
 plot_dosimeters_co2=True #Plots the convolution of the various action spectra with the surficial spectra for the co2 study, integrated, and normalized. Helps us see how these parameters vary. 
+plot_dosimeters_h2o=True #Plots the convolution of the various action spectra with the surficial spectra for h2o
+plot_dosimeters_so2=True #Plots the convolution of the various action spectra with the surficial spectra for so2
+plot_dosimeters_h2s=True #Plots the convolution of the various action spectra with the surficial spectra for h2s
 plot_dosimeters_ch4=False #Plots the convolution of the various action spectra with the surficial spectra for ch4
-plot_dosimeters_h2o=False #Plots the convolution of the various action spectra with the surficial spectra for h2o
-plot_dosimeters_so2=False #Plots the convolution of the various action spectra with the surficial spectra for so2
-plot_dosimeters_h2s=False #Plots the convolution of the various action spectra with the surficial spectra for h2s
 plot_dosimeters_o2=False #Plots the convolution of the various action spectra with the surficial spectra for o2
 plot_dosimeters_o3=False #Plots the convolution of the various action spectra with the surficial spectra for o3
 
@@ -44,12 +44,11 @@ plot_dosimeters_o3=False #Plots the convolution of the various action spectra wi
 ############################
 if plot_intvsflux:
 	wav, toa_intensity, surface_flux, total_intensity,surface_intensity=np.genfromtxt('./TwoStreamOutput/rugheimer_earth_epoch0_a=newsnow_z=60.dat', skip_header=1, skip_footer=0, usecols=(2,3,4,5,6), unpack=True) 
-	pdb.set_trace()
 
 	fig1, (ax1)=plt.subplots(1, figsize=(8,5), sharex=True)
-	ax1.plot(wav, toa_intensity*wav/hc, linestyle='-', color='black',marker='s', label='TOA Intensity')
-	ax1.plot(wav, total_intensity*wav/hc, linestyle='-', color='red', marker='s',label='Total BOA Intensity')
-	ax1.plot(wav, surface_intensity*wav/hc,linestyle='-', color='purple', marker='s',label='Surface Intensity')
+	ax1.plot(wav, toa_intensity*wav/hc, linestyle='-', color='black',marker='s', label='TOA Flux')
+	ax1.plot(wav, total_intensity*wav/hc, linestyle='-', color='red', marker='s',label='BOA Actinic Flux')
+	ax1.plot(wav, surface_intensity*wav/hc,linestyle='-', color='purple', marker='s',label='Surface Radiance')
 	ax1.plot(wav, surface_flux*wav/hc, linestyle='-', color='blue', marker='s',label='Surface Flux')
 	ylimits=[1.e9, 1.e15]
 	ax1.set_title('R+2015 Atmosphere, A=New Snow, SZA=60')
@@ -99,16 +98,14 @@ if plot_alb_zenithangle:
 		wav_z_66p5, toa_intensity_z_66p5, surface_flux_z_66p5,  surface_intensity_z_66p5, surface_intensity_diffuse_z_66p5, surface_intensity_direct_z_66p5=np.genfromtxt('./TwoStreamOutput/AlbZen/rugheimer_earth_epoch0_a='+albedo+'_z=66.5.dat', skip_header=1, skip_footer=0, usecols=(2,3,4,6,7,8), unpack=True) #albedo=desert, zenith angle=0 degrees
 		
 		if albind==0: #Initialize with TOA flux
-			ax1.plot(wav_z_0, toa_intensity_z_0*wav_z_0/hc, marker='.', color='black', label=r'TOA Intensity')
-			ax2.plot(wav_z_48p2, toa_intensity_z_48p2*wav_z_48p2/hc, marker='.', color='black', label=r'TOA Intensity')
-			ax3.plot(wav_z_66p5, toa_intensity_z_66p5*wav_z_66p5/hc, marker='.', color='black', label=r'TOA Intensity')
+			ax1.plot(wav_z_0, toa_intensity_z_0*wav_z_0/hc, marker='.', color='black', label=r'TOA Flux')
+			ax2.plot(wav_z_48p2, toa_intensity_z_48p2*wav_z_48p2/hc, marker='.', color='black', label=r'TOA Flux')
+			ax3.plot(wav_z_66p5, toa_intensity_z_66p5*wav_z_66p5/hc, marker='.', color='black', label=r'TOA Flux')
 		
 		ax1.plot(wav_z_0, surface_intensity_z_0*wav_z_0/hc, marker='.', color=next(colorseq1), label=r'A='+AlbedoLabels[albind])
 		ax2.plot(wav_z_48p2, surface_intensity_z_48p2*wav_z_48p2/hc, marker='.', color=next(colorseq2), label=r'A='+AlbedoLabels[albind])
 		ax3.plot(wav_z_66p5, surface_intensity_z_66p5*wav_z_66p5/hc, marker='.', color=next(colorseq3), label=r'A='+AlbedoLabels[albind])
 		
-
-	
 	#Step 3: Clean up figure
 	ylimits=[1.e9, 1.e15]
 	ax1.set_title(r'z=0$^\circ$')
@@ -154,8 +151,8 @@ if plot_co2_limits:
 	colorseq2=iter(cm.rainbow(np.linspace(0,1,len(co2multiplelist))))
 	
 	#Plot TOA intensities
-	ax1.plot(wav_max_rugheimer, toa_intensity_max_rugheimer*wav_min_rugheimer/hc, linestyle='-', color='black', label='TOA Intensity')
-	ax2.plot(wav_min_rugheimer, toa_intensity_min_rugheimer*wav_min_rugheimer/hc, linestyle='-', color='black', label='TOA Intensity')
+	ax1.plot(wav_max_rugheimer, toa_intensity_max_rugheimer*wav_min_rugheimer/hc, linestyle='-', color='black', label='TOA Flux')
+	ax2.plot(wav_min_rugheimer, toa_intensity_min_rugheimer*wav_min_rugheimer/hc, linestyle='-', color='black', label='TOA Flux')
 	
 	#In a loop, load the intensities and plot
 	for ind in range(0, len(co2multiplelist)):
@@ -236,7 +233,7 @@ if plot_altgas_limits:
 			wav, toa_intensity, surface_flux, surface_intensity, surface_intensity_diffuse, surface_intensity_direct=np.genfromtxt(datafile, skip_header=1, skip_footer=0, usecols=(2,3,4,6,7,8), unpack=True)
 			
 			if multind==0:
-				ax1.plot(wav,toa_intensity*wav/hc, linestyle='-', linewidth=1, color='black', label=r'TOA Intensity')
+				ax1.plot(wav,toa_intensity*wav/hc, linestyle='-', linewidth=1, color='black', label=r'TOA Flux')
 
 			if multiple==1.: #represent the base fiducial Rugheimer model with a different line
 				linestylevar='-'
@@ -342,10 +339,10 @@ if plot_dosimeters_co2:
 	#pdb.set_trace()
 	
 	#Finalize plot details.
-	ax1.set_ylabel(r'Relative Dose $D$')
-	ax2.set_ylabel(r'Relative Dose $D$')
-	ax3.set_ylabel(r'Relative Dose $D$')
-	ax4.set_ylabel(r'Relative Dose $D$')
+	ax1.set_ylabel(r'Relative Dose Rate $D$')
+	ax2.set_ylabel(r'Relative Dose Rate $D$')
+	ax3.set_ylabel(r'Relative Dose Rate $D$')
+	ax4.set_ylabel(r'Relative Dose Rate $D$')
 	ax1.set_xlabel(r'N$_{CO2}$ (cm$^{-2}$)')
 	ax2.set_xlabel(r'N$_{CO2}$ (cm$^{-2}$)')
 	ax3.set_xlabel(r'N$_{CO2}$ (cm$^{-2}$)')
@@ -362,10 +359,10 @@ if plot_dosimeters_co2:
 	ax2.set_xlim([2.09e18, 2.09e24])
 	ax3.set_xlim([2.09e24, 9.85e26])
 	ax4.set_xlim([2.09e24, 9.85e26])
-	ax1.set_ylim([0.95,1.8])
+	ax1.set_ylim([0.95,1.9])
 	ax2.set_ylim([0.95,1.6])
-	ax3.set_ylim([1.e-9, 1.e1])
-	ax4.set_ylim([1.e-9, 1.e1])
+	ax3.set_ylim([1.e-2, 1.e1])
+	ax4.set_ylim([1.e-2, 1.e1])
 	
 	ax1.legend(bbox_to_anchor=[0, 1.2, 1.78, 0.5], loc=3, ncol=2, mode='expand', borderaxespad=0., fontsize=10)  
 	plt.savefig('./Plots/paperplots_co2_uvdoses.eps', orientation='portrait',papertype='letter', format='eps')
@@ -436,18 +433,18 @@ if plot_dosimeters_co2:
 	ax4.axvline(N_CO2s[min_inds[kastingupperind]], color='black', linewidth=1, linestyle='--') #Kasting upper limit
 	
 	#Finalize plot details.
-	ax1.set_ylabel(r'Relative Dose $D$')
-	ax2.set_ylabel(r'Relative Dose $D$')
-	ax3.set_ylabel(r'Relative Dose $D$')
-	ax4.set_ylabel(r'Relative Dose $D$')
+	ax1.set_ylabel(r'Relative Dose Rate $D$')
+	ax2.set_ylabel(r'Relative Dose Rate $D$')
+	ax3.set_ylabel(r'Relative Dose Rate $D$')
+	ax4.set_ylabel(r'Relative Dose Rate $D$')
 	ax1.set_xlabel(r'N$_{CO2}$ (cm$^{-2}$)')
 	ax2.set_xlabel(r'N$_{CO2}$ (cm$^{-2}$)')
 	ax3.set_xlabel(r'N$_{CO2}$ (cm$^{-2}$)')
 	ax4.set_xlabel(r'N$_{CO2}$ (cm$^{-2}$)')
 	ax1.set_yscale('linear')
 	ax2.set_yscale('linear')
-	ax3.set_yscale('log')
-	ax4.set_yscale('log')
+	ax3.set_yscale('linear')
+	ax4.set_yscale('linear')
 	ax1.set_xscale('log')
 	ax2.set_xscale('log')
 	ax3.set_xscale('log')
@@ -458,8 +455,8 @@ if plot_dosimeters_co2:
 	ax4.set_xlim([2.09e24, 9.85e26])
 	ax1.set_ylim([0.90,1.8])
 	ax2.set_ylim([0.95,1.3])
-	ax3.set_ylim([1.e-2, 1.e4])
-	ax4.set_ylim([1.e-2, 1.e4])
+	ax3.set_ylim([0.5, 1.8])
+	ax4.set_ylim([0.8, 1.2])
 	
 	ax1.legend(bbox_to_anchor=[0, 1.2, 1.78, 0.5], loc=3, ncol=2, mode='expand', borderaxespad=0., fontsize=10)  
 	plt.savefig('./Plots/paperplots_co2_uvdoses_norm.eps', orientation='portrait',papertype='letter', format='eps')
@@ -513,7 +510,7 @@ if plot_dosimeters_ch4:
 	ax1.axhline(1., color='black', linewidth=1) #Values above this: faster rxn than under 0.1 bar CO2
 	
 	#Finalize plot details.
-	ax1.set_ylabel(r'Relative Dose $D/D_{NCO2=2.09e24 cm^{-2}}$')
+	ax1.set_ylabel(r'Relative Dose Rate $D/D_{NCO2=2.09e24 cm^{-2}}$')
 	ax1.set_xlabel(r'N$_{'+gaslabel+'}$ (cm$^{-2}$)')
 	ax1.set_yscale('linear')
 	ax1.set_xscale('log')
@@ -574,12 +571,12 @@ if plot_dosimeters_h2o:
 	ax1.axhline(1., color='black', linewidth=1) #Values above this: faster rxn than under 0.1 bar CO2
 	
 	#Finalize plot details.
-	ax1.set_ylabel(r'Relative Dose $D/D_{NCO2=2.09e24 cm^{-2}}$')
+	ax1.set_ylabel(r'Relative Dose Rate $D/D_{NCO2=2.09e24 cm^{-2}}$')
 	ax1.set_xlabel(r'N$_{'+gaslabel+'}$ (cm$^{-2}$)')
 	ax1.set_yscale('linear')
 	ax1.set_xscale('log')
 	ax1.set_xlim([N_gas[minind],N_gas[maxind]])
-	ax1.set_ylim([0.4,1.8])
+	ax1.set_ylim([0.7,1.7])
 
 	plt.tight_layout(rect=(0,0,1., 0.7))
 	ax1.legend(bbox_to_anchor=[0, 1.2, 1., 0.5], loc=3, ncol=2, mode='expand', borderaxespad=0., fontsize=10)  
@@ -650,14 +647,14 @@ if plot_dosimeters_so2:
 	ax2.axhline(1., color='black', linewidth=1) #Values above this: faster rxn than under 0.1 bar CO2
 	
 	#Finalize plot details.
-	ax1.set_ylabel(r'Relative Dose $D/D_{NCO2=2.09e24 cm^{-2}}$')
+	ax1.set_ylabel(r'Relative Dose Rate $D/D_{NCO2=2.09e24 cm^{-2}}$')
 	ax1.set_xlabel(r'N$_{'+gaslabel+'}$ (cm$^{-2}$)')
 	ax1.set_yscale('linear')
 	ax1.set_xscale('log')
 	ax1.set_xlim([N_gas[minind],N_gas[breakind]])
 	#ax1.set_ylim([0.4,1.8])
 
-	ax2.set_ylabel(r'Relative Dose $D/D_{NCO2=2.09e24 cm^{-2}}$')
+	ax2.set_ylabel(r'Relative Dose Rate $D/D_{NCO2=2.09e24 cm^{-2}}$')
 	ax2.set_xlabel(r'N$_{'+gaslabel+'}$ (cm$^{-2}$)')
 	ax2.set_yscale('log')
 	ax2.set_xscale('log')
@@ -700,14 +697,14 @@ if plot_dosimeters_so2:
 	ax2.axhline(1., color='black', linewidth=1) #Values above this: faster rxn than under 0.1 bar CO2
 	
 	#Finalize plot details.
-	ax1.set_ylabel(r'Relative Dose $D^{UMP-X}/D^{CuCN3-Y}$')
+	ax1.set_ylabel(r'Relative Dose Rate $D^{UMP-X}/D^{CuCN3-Y}$')
 	ax1.set_xlabel(r'N$_{'+gaslabel+'}$ (cm$^{-2}$)')
 	ax1.set_yscale('linear')
 	ax1.set_xscale('log')
 	ax1.set_xlim([N_gas[minind],N_gas[breakind]])
 	#ax1.set_ylim([0.4,1.8])
 
-	ax2.set_ylabel(r'Relative Dose $D^{UMP-X}/D^{CuCN3-Y}$')
+	ax2.set_ylabel(r'Relative Dose Rate $D^{UMP-X}/D^{CuCN3-Y}$')
 	ax2.set_xlabel(r'N$_{'+gaslabel+'}$ (cm$^{-2}$)')
 	ax2.set_yscale('log')
 	ax2.set_xscale('log')
@@ -784,14 +781,14 @@ if plot_dosimeters_h2s:
 	ax2.axhline(1., color='black', linewidth=1) #Values above this: faster rxn than under 0.1 bar CO2
 	
 	#Finalize plot details.
-	ax1.set_ylabel(r'Relative Dose $D/D_{NCO2=2.09e24 cm^{-2}}$')
+	ax1.set_ylabel(r'Relative Dose Rate $D/D_{NCO2=2.09e24 cm^{-2}}$')
 	ax1.set_xlabel(r'N$_{'+gaslabel+'}$ (cm$^{-2}$)')
 	ax1.set_yscale('linear')
 	ax1.set_xscale('log')
 	ax1.set_xlim([N_gas[minind],N_gas[breakind]])
 	#ax1.set_ylim([0.4,1.8])
 
-	ax2.set_ylabel(r'Relative Dose $D/D_{NCO2=2.09e24 cm^{-2}}$')
+	ax2.set_ylabel(r'Relative Dose Rate $D/D_{NCO2=2.09e24 cm^{-2}}$')
 	ax2.set_xlabel(r'N$_{'+gaslabel+'}$ (cm$^{-2}$)')
 	ax2.set_yscale('log')
 	ax2.set_xscale('log')
@@ -833,14 +830,14 @@ if plot_dosimeters_h2s:
 	ax2.axhline(1., color='black', linewidth=1) #Values above this: faster rxn than under 0.1 bar CO2
 	
 	#Finalize plot details.
-	ax1.set_ylabel(r'Relative Dose $D^{UMP-X}/D^{CuCN3-Y}$')
+	ax1.set_ylabel(r'Relative Dose Rate $D^{UMP-X}/D^{CuCN3-Y}$')
 	ax1.set_xlabel(r'N$_{'+gaslabel+'}$ (cm$^{-2}$)')
 	ax1.set_yscale('linear')
 	ax1.set_xscale('log')
 	ax1.set_xlim([N_gas[minind],N_gas[breakind2]])
 	ax1.set_ylim([0.,4])
 
-	ax2.set_ylabel(r'Relative Dose $D^{UMP-X}/D^{CuCN3-Y}$')
+	ax2.set_ylabel(r'Relative Dose Rate $D^{UMP-X}/D^{CuCN3-Y}$')
 	ax2.set_xlabel(r'N$_{'+gaslabel+'}$ (cm$^{-2}$)')
 	ax2.set_yscale('log')
 	ax2.set_xscale('log')
@@ -900,7 +897,7 @@ if plot_dosimeters_o2:
 	ax1.axhline(1., color='black', linewidth=1) #Values above this: faster rxn than under 0.1 bar CO2
 
 	#Finalize plot details.
-	ax1.set_ylabel(r'Relative Dose $D/D_{NCO2=2.09e24 cm^{-2}}$')
+	ax1.set_ylabel(r'Relative Dose Rate $D/D_{NCO2=2.09e24 cm^{-2}}$')
 	ax1.set_xlabel(r'N$_{'+gaslabel+'}$ (cm$^{-2}$)')
 	ax1.set_yscale('linear')
 	ax1.set_xscale('log')
@@ -961,7 +958,7 @@ if plot_dosimeters_o3:
 	ax1.axhline(1., color='black', linewidth=1) #Values above this: faster rxn than under 0.1 bar CO2
 
 	#Finalize plot details.
-	ax1.set_ylabel(r'Relative Dose $D/D_{NCO2=2.09e24 cm^{-2}}$')
+	ax1.set_ylabel(r'Relative Dose Rate $D/D_{NCO2=2.09e24 cm^{-2}}$')
 	ax1.set_xlabel(r'N$_{'+gaslabel+'}$ (cm$^{-2}$)')
 	ax1.set_yscale('log')
 	ax1.set_xscale('log')

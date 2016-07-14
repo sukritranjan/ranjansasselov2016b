@@ -28,21 +28,20 @@ amu2g=1.66054e-24 #1 amu in g
 ########################
 ###User-set parameters
 ########################
-gas='o3'
-multiples=np.array([1.e-5, 1.e-4, 1.e-3, 1.e-2, 1.e-1, 1., 1.e1, 1.e2, 1.e3, 1.e4, 1.e5, 1.e6, 1.e7, 1.e8])
-multiple=str(multiples[0])
+multiples=np.array([0., 1.e-6, 1.e-5, 1.e-4, 1.e-3, 1.e-2, 1.e-1, 1., 1.e1, 1.e2, 1.e3, 1.33, 46.6, 470., .6, 8.93e-3]) #values we will be scaling the CO2 column by 
+multiple=str(multiples[10])
 
-filename='gaslim/surface_intensities_'+gas+'limits_'+gas+'multiple='+multiple+'_a=newsnow_z=0' #name of file to write output, plot to
+filename='/CO2lim/surface_intensities_co2limits_co2multiple='+multiple+'_a=newsnow_z=0' #name of file to write output, plot to
 
 #TOA input, and comparison file.
 inputspectrafile='./LiteratureSpectra/general_spectral_input.dat' #TOA Stellar Input and Reference Spectra for Comparison
 
 #Mixing ratio file
 N_species=8 #how many gas species are in our model?
-mr_profilefile='./MixingRatios/gaslim/rugheimer_earth_epoch0_mixingratios_'+gas+'limits_'+gas+'multiple='+multiple+'.dat' #Mixing ratio file
+mr_profilefile='./MixingRatios/CO2lim/rugheimer_earth_epoch0_mixingratios_co2limits_co2multiple='+multiple+'.dat' #Mixing ratio file
 
 #T/P Profile.
-atmoprofilefile='./TPProfiles/gaslim/rugheimer_earth_epoch0_atmosphereprofile_'+gas+'limits_'+gas+'multiple='+multiple+'.dat' #T/P Profile File. File boundaries should match z_lower and z_upper
+atmoprofilefile='./TPProfiles/CO2lim/rugheimer_earth_epoch0_atmosphereprofile_co2limits_co2multiple='+multiple+'.dat' #T/P Profile File. File boundaries should match z_lower and z_upper
 
 #RT model layers
 z_upper_limit=64.e5 #Upper edge of the atmospheric layers, in cm. The bottom edge of the layers is assumed to be at 0.
@@ -65,9 +64,7 @@ frac_newsnow=1. #if nonuniform albedo: what fraction of ground is new snow?
 
 
 ###Temperature of Ground
-temp_ground=292.5 #Temperature of the ground in K.
-
-
+temp_ground=292.5 #Temperature of the ground in K
 ########################
 ###Set output file names
 ########################
@@ -140,17 +137,17 @@ xc_abs_species_wav=np.zeros([N_species,N_wavelengths])
 #Note that in some cases, the predicted Rayleigh scattering cross-section exceeds that measured in laboratory studies. This means that 1) the single-scattering albedo w_0>1 in these cases and 2) the absorption cross-section is negative (both unphysical). This is accounted for in compute_optical_parameters, where w_0 is set to a maximum of 0.999. The only parameters used in the radiative transfer are w_0 and tau_tot, so the negative absorption cross-sections never come into play. 
 
 
-#####Try Rugheimer cross-sections and scattering instead
-####(xc_tot_species_wav[0,:], xc_abs_species_wav[0,:], xc_scat_species_wav[0,:])=css.get_rugheimer_xc(wav_leftedges, wav_rightedges, 'n2',0.78, 0.)
-#####(xc_tot_species_wav[0,:], xc_abs_species_wav[0,:], xc_scat_species_wav[0,:])=css.get_rugheimer_xc(wav_leftedges, wav_rightedges, 'n2',0.89, 0.1)
-####(xc_tot_species_wav[1,:], xc_abs_species_wav[1,:], xc_scat_species_wav[1,:])=css.get_rugheimer_xc(wav_leftedges, wav_rightedges, 'co2',0,0)
-####(xc_tot_species_wav[2,:], xc_abs_species_wav[2,:], xc_scat_species_wav[2,:])=css.get_rugheimer_xc(wav_leftedges, wav_rightedges, 'h2o',0,0)
-####(xc_tot_species_wav[4,:], xc_abs_species_wav[4,:], xc_scat_species_wav[4,:])=css.get_rugheimer_xc(wav_leftedges, wav_rightedges, 'so2',0,0)
-####(xc_tot_species_wav[5,:], xc_abs_species_wav[5,:], xc_scat_species_wav[5,:])=css.get_rugheimer_xc(wav_leftedges, wav_rightedges, 'o2',0,0)
-####(xc_tot_species_wav[6,:], xc_abs_species_wav[6,:], xc_scat_species_wav[6,:])=css.get_rugheimer_xc(wav_leftedges, wav_rightedges, 'o3',0,0)
-#####Rugheimer has no CH4 or H2S so we keep our own, but get rid of the scattering formalism 
-####xc_scat_species_wav[3,:]=xc_scat_species_wav[3,:]*0.0
-####xc_scat_species_wav[7,:]=xc_scat_species_wav[7,:]*0.0
+#######Try Rugheimer cross-sections and scattering instead
+######(xc_tot_species_wav[0,:], xc_abs_species_wav[0,:], xc_scat_species_wav[0,:])=css.get_rugheimer_xc(wav_leftedges, wav_rightedges, 'n2',0.78, 0.)
+#######(xc_tot_species_wav[0,:], xc_abs_species_wav[0,:], xc_scat_species_wav[0,:])=css.get_rugheimer_xc(wav_leftedges, wav_rightedges, 'n2',0.89, 0.1)
+######(xc_tot_species_wav[1,:], xc_abs_species_wav[1,:], xc_scat_species_wav[1,:])=css.get_rugheimer_xc(wav_leftedges, wav_rightedges, 'co2',0,0)
+######(xc_tot_species_wav[2,:], xc_abs_species_wav[2,:], xc_scat_species_wav[2,:])=css.get_rugheimer_xc(wav_leftedges, wav_rightedges, 'h2o',0,0)
+######(xc_tot_species_wav[4,:], xc_abs_species_wav[4,:], xc_scat_species_wav[4,:])=css.get_rugheimer_xc(wav_leftedges, wav_rightedges, 'so2',0,0)
+######(xc_tot_species_wav[5,:], xc_abs_species_wav[5,:], xc_scat_species_wav[5,:])=css.get_rugheimer_xc(wav_leftedges, wav_rightedges, 'o2',0,0)
+######(xc_tot_species_wav[6,:], xc_abs_species_wav[6,:], xc_scat_species_wav[6,:])=css.get_rugheimer_xc(wav_leftedges, wav_rightedges, 'o3',0,0)
+#######Rugheimer has no CH4 or H2S so we keep our own, but get rid of the scattering formalism 
+######xc_scat_species_wav[3,:]=xc_scat_species_wav[3,:]*0.0
+######xc_scat_species_wav[7,:]=xc_scat_species_wav[7,:]*0.0
 
 ########################
 ###Get atmospheric layers column densities
@@ -171,7 +168,6 @@ colden_species_z[6,:]=columndensity_z*mr_o3
 colden_species_z[7,:]=columndensity_z*mr_h2s
 
 
-#pdb.set_trace()
 ########################
 ###Compute atmospheric optical parameters required for two-stream code: tau_n, tau_c, w0, and g in each layer as a function of wavelength.
 ########################
@@ -182,7 +178,7 @@ tau_n_tot_z_wav, tau_c_tot_z_wav, w_0_z_wav, g_z_wav=rts.compute_optical_paramet
 
 ########Code to set scattering or absorption limits
 #######w_0_z_wav=w_0_z_wav*0.0+1.e-5#pure absorption limit
-######w_0_z_wav=w_0_z_wav*0.0+0.999#pure scattering limit
+#######w_0_z_wav=w_0_z_wav*0.0+1.-1.e-12 #pure scattering limit
 
 ########################
 ###compute the flux via the two-stream approximation
@@ -229,7 +225,6 @@ for ind in range(0,N_wavelengths):
 ########################
 ###Compute the direct fluxes throughout the atmosphere, and the surface flux.
 ########################
-
 
 direct_flux_z_wav=mu_0*intensity_toa*np.exp(-tau_c_tot_z_wav/mu_0) #Direct flux at the boundary of each layer. First layer=TOA, last layer=surface. See: Toon et al eqn 50, and recall: flux_toa=F_s*np.pi
 
@@ -286,26 +281,33 @@ indmax=np.max(inds) #here I assume monotonically decreasing
 print 'index at which intensity suppressed to 0.01 x incident is:', indmax
 print 'wavelength at which intensity suppressed 0.01 x incident is (nm):', wav_leftedges[indmax]
 
-#############################
-########Plot results
-#############################
+##debugging
+print 'Surface Albedo (500 nm)', albedo_dif_wav[-1] #how much flux is making its way back out from the planet
+print 'Planetary Albedo (500 nm)', F_plus_tau0[0,-1]/(mu_0*intensity_toa[-1]) #how much flux is making its way back out from the planet
+#print F_minus_taumax[-1,:]/(mu_0*intensity_toa) #how much flux is irradiating the planet surface
+#print np.max(tau_n_tot_z_wav[:,-1])
+#pdb.set_trace()
 
-#fig, (ax1, ax2)=plt.subplots(2, figsize=(8,6), sharex=True)
-#ax1.plot(wav_centers, intensity_toa, marker='s', color='black', label='TOA Intensity')
-#ax1.plot(wav_centers, surface_intensity_basecase, marker='s', color='blue', label='Surface Intensity (Rugheimer Base Case)')
-#ax1.plot(wav_centers, surface_intensity , marker='s', color='orange', label='Surface Intensity (This Model)')
-#ax1.set_yscale('log')
-#ax1.set_ylim([1.e-4, 1.e4])
-#ax1.set_xlabel('nm')
-#ax1.set_ylabel('erg/s/cm2/nm')
-#ax1.legend(loc=0)
+############################
+#######Plot results
+############################
 
-#ax2.plot(wav_centers, (surface_intensity-surface_intensity_basecase)/intensity_toa, marker='s', color='orange', label='Fractional Difference')
-#ax2.set_yscale('linear')
-##ax2.set_ylim([-0.006, 0.006])
-#ax2.set_xlim([100.,500.])
-#ax2.set_xlabel('nm')
-#ax2.set_ylabel('Fractional Difference')
+fig, (ax1, ax2)=plt.subplots(2, figsize=(8,6), sharex=True)
+ax1.plot(wav_centers, intensity_toa, marker='s', color='black', label='TOA Intensity')
+ax1.plot(wav_centers, surface_intensity_basecase, marker='s', color='blue', label='Surface Intensity (Rugheimer Base Case)')
+ax1.plot(wav_centers, surface_intensity , marker='s', color='orange', label='Surface Intensity (This Model)')
+ax1.set_yscale('log')
+ax1.set_ylim([1.e-4, 1.e4])
+ax1.set_xlabel('nm')
+ax1.set_ylabel('erg/s/cm2/nm')
+ax1.legend(loc=0)
+
+ax2.plot(wav_centers, (surface_intensity-surface_intensity_basecase)/intensity_toa, marker='s', color='orange', label='Fractional Difference')
+ax2.set_yscale('linear')
+#ax2.set_ylim([-0.006, 0.006])
+ax2.set_xlim([100.,500.])
+ax2.set_xlabel('nm')
+ax2.set_ylabel('Fractional Difference')
 ####plt.savefig(plotfilename, orientation='portrait',papertype='letter', format='pdf')
 
 ###############################
@@ -330,6 +332,8 @@ np.savetxt(f, toprint, delimiter='		', fmt='%1.7e', newline='\n')
 f.close()
 
 plt.show()
+
+
 
 """
 ********************************************************************************
@@ -376,38 +380,39 @@ SCRATCH CODE
 #F_net_deviation_max_normalized=F_net_deviation_max/(direct_flux_z_wav[0,:])
 #F_net_deviation_stddevs_normalized=F_net_deviation_stddevs/(direct_flux_z_wav[0,:])
 
+#print np.abs(F_net_deviation_max_normalized)
+#print np.min(np.abs(F_net_deviation_max_normalized))
 #print np.max(np.abs(F_net_deviation_max_normalized))
-#print np.max(np.abs(F_net_deviation_stddevs_normalized))
+##print np.max(np.abs(F_net_deviation_stddevs_normalized))
 
-##############################
-#########Print spectra for Wuttke measurement:
-##############################
-##toprint=np.zeros([np.size(wav_centers), 6])
-##toprint[:,0]=wav_leftedges #left edge of wavelength bin (nm)
-##toprint[:,1]=wav_rightedges #right edge of wavelength bin (nm)
-##toprint[:,2]=wav_centers #center of wavelength bin (nm)
-##toprint[:,3]=intensity_toa #intensity incident at top of atmosphere (erg/s/cm2/nm)
-##toprint[:,4]=surface_diffuse_intensity #diffuse intensity at bottom of atmosphere (erg/s/cm2/nm)
-##toprint[:,5]=surface_intensity_basecase #reference measurements
-##header='Left Bin Edge (nm)	Right Bin Edge (nm)	Bin Center (nm)		Top of Atm Intensity (erg/s/nm/cm2)		Total Surface Flux (erg/s/nm/cm2)		Total Intensity at BOA (erg/s/nm/cm2)		Total Surface Intensity (erg/s/nm/cm2)		Total Surface Diffuse Intensity (erg/s/nm/cm2)		Total Surface Direct Intensity (erg/s/nm/cm2)\n'
-##f=open(writefilename, 'w')
-##f.write(header)
-##np.savetxt(f, toprint, delimiter='		', fmt='%1.7e', newline='\n')
-##f.close()
+#############################
+########Print spectra for Wuttke measurement:
+#############################
+#toprint=np.zeros([np.size(wav_centers), 6])
+#toprint[:,0]=wav_leftedges #left edge of wavelength bin (nm)
+#toprint[:,1]=wav_rightedges #right edge of wavelength bin (nm)
+#toprint[:,2]=wav_centers #center of wavelength bin (nm)
+#toprint[:,3]=intensity_toa #intensity incident at top of atmosphere (erg/s/cm2/nm)
+#toprint[:,4]=surface_diffuse_intensity #diffuse intensity at bottom of atmosphere (erg/s/cm2/nm)
+#toprint[:,5]=surface_intensity_basecase #reference measurements
+#header='Left Bin Edge (nm)	Right Bin Edge (nm)	Bin Center (nm)		Top of Atm Intensity (erg/s/nm/cm2)		Total Surface Flux (erg/s/nm/cm2)		Total Intensity at BOA (erg/s/nm/cm2)		Total Surface Intensity (erg/s/nm/cm2)		Total Surface Diffuse Intensity (erg/s/nm/cm2)		Total Surface Direct Intensity (erg/s/nm/cm2)\n'
+#f=open(writefilename, 'w')
+#f.write(header)
+#np.savetxt(f, toprint, delimiter='		', fmt='%1.7e', newline='\n')
+#f.close()
 
-################################
-###########Print spectra for WOUDC measurement
-################################
-####toprint=np.zeros([np.size(wav_centers), 6])
-####toprint[:,0]=wav_leftedges #left edge of wavelength bin (nm)
-####toprint[:,1]=wav_rightedges #right edge of wavelength bin (nm)
-####toprint[:,2]=wav_centers #center of wavelength bin (nm)
-####toprint[:,3]=intensity_toa #intensity incident at top of atmosphere (erg/s/cm2/nm)
-####toprint[:,4]=surface_flux #flux incident at bottom of atmosphere (erg/s/cm2/nm)
-####toprint[:,5]=surface_intensity_basecase #reference measurements
-####header='Left Bin Edge (nm)	Right Bin Edge (nm)	Bin Center (nm)		Top of Atm Intensity (erg/s/nm/cm2)		Total Surface Flux (erg/s/nm/cm2)		Total Intensity at BOA (erg/s/nm/cm2)		Total Surface Intensity (erg/s/nm/cm2)		Total Surface Diffuse Intensity (erg/s/nm/cm2)		Total Surface Direct Intensity (erg/s/nm/cm2)\n'
-####f=open(writefilename, 'w')
-####f.write(header)
-####np.savetxt(f, toprint, delimiter='		', fmt='%1.7e', newline='\n')
-####f.close()
-
+#############################
+########Print spectra for WOUDC measurement
+#############################
+#toprint=np.zeros([np.size(wav_centers), 6])
+#toprint[:,0]=wav_leftedges #left edge of wavelength bin (nm)
+#toprint[:,1]=wav_rightedges #right edge of wavelength bin (nm)
+#toprint[:,2]=wav_centers #center of wavelength bin (nm)
+#toprint[:,3]=intensity_toa #intensity incident at top of atmosphere (erg/s/cm2/nm)
+#toprint[:,4]=surface_flux #flux incident at bottom of atmosphere (erg/s/cm2/nm)
+#toprint[:,5]=surface_intensity_basecase #reference measurements
+#header='Left Bin Edge (nm)	Right Bin Edge (nm)	Bin Center (nm)		Top of Atm Intensity (erg/s/nm/cm2)		Total Surface Flux (erg/s/nm/cm2)		Total Intensity at BOA (erg/s/nm/cm2)		Total Surface Intensity (erg/s/nm/cm2)		Total Surface Diffuse Intensity (erg/s/nm/cm2)		Total Surface Direct Intensity (erg/s/nm/cm2)\n'
+#f=open(writefilename, 'w')
+#f.write(header)
+#np.savetxt(f, toprint, delimiter='		', fmt='%1.7e', newline='\n')
+#f.close()

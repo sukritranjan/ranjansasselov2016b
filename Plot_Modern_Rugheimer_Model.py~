@@ -55,13 +55,13 @@ twostr3_int_gnd=importeddata[:,6] #intensity at planetary surface, =0.5*diffuse 
 fig, (ax0, ax1)=plt.subplots(2, figsize=(cm2inch(16.5),10.), sharex=True)
 markersizeval=5.
 
-ax0.plot(rugheimer_wav_centers, rugheimer_int_toa,  marker='s', markersize=markersizeval, linewidth=1, color='black', label='TOA Int.')
-ax0.plot(rugheimer_wav_centers, rugheimer_int_boa,  marker='s', markersize=markersizeval, linewidth=1, color='red', label='BOA Int. \n(Rugheimer+2015)')
-ax0.plot(twostr1_wav_centers, twostr1_int_BOA,  marker='s', markersize=markersizeval, linewidth=1, color='blue', label='BOA Int. (Our Model)')
-ax0.plot(twostr3_wav_centers, twostr3_int_BOA,  marker='s', markersize=markersizeval, linewidth=1, color='orange', label='BOA Int. (Our Model, \nRugheimer+2013 XCs)')
+ax0.plot(rugheimer_wav_centers, rugheimer_int_toa,  marker='s', markersize=markersizeval, linewidth=1, color='black', label='TOA Flux')
+ax0.plot(rugheimer_wav_centers, rugheimer_int_boa,  marker='s', markersize=markersizeval, linewidth=1, color='red', label='BOA Actinic Flux \n(R+2013)')
+ax0.plot(twostr1_wav_centers, twostr1_int_BOA,  marker='s', markersize=markersizeval, linewidth=1, color='blue', label='BOA Actinic Flux \n(Our Model)')
+ax0.plot(twostr3_wav_centers, twostr3_int_BOA,  marker='s', markersize=markersizeval, linewidth=1, color='orange', label='BOA Actinic Flux \n(Our Model, R+2013 XCs)')
 ax0.set_yscale('log')
 ax0.set_ylim([1.e-2, 1e4])
-ax0.set_ylabel('Total Intensity \n (erg s$^{-1}$cm$^{-2}$nm$^{-1}$)')
+ax0.set_ylabel('Flux \n (erg s$^{-1}$cm$^{-2}$nm$^{-1}$)')
 ax0.legend(loc='lower center', fontsize=12)
 ax0.set_xlim([130, 860])
 
@@ -82,11 +82,11 @@ rugheimer_int_boa_plot_1[bar]=1.
 
 
 ax1.plot(twostr1_wav_centers, (twostr1_int_BOA-rugheimer_int_boa)/rugheimer_int_toa, marker='s', linewidth=1, color='blue', label='Our XCs')
-ax1.plot(twostr3_wav_centers, (twostr3_int_BOA-rugheimer_int_boa)/rugheimer_int_toa, marker='s', linewidth=1, color='orange', label='Rugheimer+2013 XCs')
+ax1.plot(twostr3_wav_centers, (twostr3_int_BOA-rugheimer_int_boa)/rugheimer_int_toa, marker='s', linewidth=1, color='orange', label='R+2013 XCs')
 ax1.set_yscale('linear')
 ax1.set_ylim([-1.1, 0.1])
 ax1.set_xlabel('Wavelength (nm)')
-ax1.set_ylabel('(Our Model-R+2013)/TOA Int.')
+ax1.set_ylabel('(Our Model-R+2013)/TOA Flux')
 ax1.legend(loc='lower center', fontsize=12)
 ax1.set_xlim([130, 860])
 
@@ -98,5 +98,4 @@ print np.max(np.abs(bunk))
 print np.max(np.abs(thunk))
 plt.tight_layout()
 plt.savefig('./Plots/reproduce_rugheimer_modern.eps', orientation='portrait',papertype='letter', format='eps')
-pdb.set_trace()
 plt.show()

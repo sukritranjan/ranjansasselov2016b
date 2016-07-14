@@ -36,7 +36,7 @@ def compute_optical_parameters(colden_species_z,xc_tot_species_wav, xc_scat_spec
 
 	Notes:
 	1. This initial version of the code assumes we are working only with gas species in the UV. Consequently, all scattering is assumed to be Rayleigh, and all scattering is assumed to be symmetric.
-	2. This version of the code follows twostr.f and sets a maximum of 0.999 on w_0. This is done to avoid instabilities in the two-stream matrix inversion. Coincidentally, this also fixes any cases where the Rayleigh scattering prediction exceeds measured absorption, which we see for CO2 in some bins. 
+	2. This code sets a maximum value on w_0=1-1e-12. This is done to avoid instabilities in the two-stream matrix inversion. Note this is different from what twostr.f do: they impose a maximum value of 1-1e-3. However, this comparatively low value leads to the problem of "false absorption" for atmospheres with high scattering optical depth (e.g. thick CO2 atmospheres) 
 	3. The optical depth is computed along the zenith, following the formalism of Toon et al. This enables us to account for zenith angle separately, in the two-stream code.
 	4. Following the Toon formalism, tau=0 at the TOA, so the first atmospheric layer corresponds to the TOA and the last atmospheric layer corresponds to the BOA.
 
@@ -70,13 +70,14 @@ def compute_optical_parameters(colden_species_z,xc_tot_species_wav, xc_scat_spec
 	########################
 	w_0_z_wav=tau_n_scat_z_wav/tau_n_tot_z_wav #single scattering albedo across each atmospheric layer as a function of wavelength
 	
-	w_0_z_wav[w_0_z_wav>0.999]=0.999 #The twostr.f code imposes a ceiling on w_0 of 0.999, so we have done the same.
+	w_0_max=1.-1.e-12
+	w_0_z_wav[w_0_z_wav>w_0_max]=w_0_max #The twostr.f code imposes a ceiling on w_0 of 0.999. I have gone 9 decimals further (1 ppt). This keeps tau_scat*(1-w_0)<0.01 for a ~100 bar CO2 atmosphere at 90 nm. Should be quite safe.
+	
 	########################
 	###Compute asymmetry parameter
 	########################
 	#For Rayleigh-scattering gases, g=0.
 	g_z_wav=np.zeros([N_layers, N_wav]) #asymmetry parameter across each atmospheric layer as a function of wavelength. 
-	
 	
 	########################
 	###Do delta-Eddington approximation?
@@ -84,7 +85,6 @@ def compute_optical_parameters(colden_species_z,xc_tot_species_wav, xc_scat_spec
 	if deltaapproxflag==1:
 		#This approximation reparametrizes tau_n, w_0, and g, and improves accuracy of the Eddington 2-stream solutions in the case of strongly forward-scattering species.
 		#For our initial work, where we are working with symmetrically-scattering gases with g=0, this approximation has no effect.
-		#In the CLIMA models (twostr.f, photo_CO2.f, and siblings) these approximations are used for the quadrature case also. However, I have seen some work which suggests that they are not applicable in the IR (hemispheric mean). We will have to look into this more closely when working with the IR.
 		#In the limit of g=0, this changes nothing.
 		#The implementation of this approximation is based on twostr.f from the CLIMA code.
 		

@@ -18,8 +18,8 @@ def cm2inch(cm): #function to convert cm to inches; useful for complying with As
 ########################
 ###Specific which family of plots to generate
 ########################
-plot_wuttke=0 # Plot reproduction of Wuttke et al (2006) plot for surface radiance (Antarctica)
-plot_woudc=1# Plot reproduction of direct flux for WOUDC measurements of direct flux (Toronto station, 2003/6/21, 11:54:06, SZE=20.376, O3=354 DU)
+plot_wuttke=True # Plot reproduction of Wuttke et al (2006) plot for surface radiance (Antarctica)
+plot_woudc=True # Plot reproduction of direct flux for WOUDC measurements of direct flux (Toronto station, 2003/6/21, 11:54:06, SZE=20.376, O3=354 DU)
 #1 means plotting happens. 0 means plotting does not happen. 
 
 ############################
@@ -36,7 +36,8 @@ if plot_wuttke:
 	wuttke_boa_modelled=cookbook.movingaverage(wuttke_boa_modelled, 10)
 	
 	fig, (ax1, ax2)=plt.subplots(2, figsize=(12,10), sharex=True)
-	ax1.plot(wuttke_wav, wuttke_toa_modelled, marker='s', color='black', label='TOA Intensity')
+	ax1.set_title('Reproduction of Wuttke+2006 Diffuse Radiance Measurements')
+	ax1.plot(wuttke_wav, wuttke_toa_modelled, marker='s', color='black', label='TOA Flux')
 	ax1.plot(wuttke_wav, wuttke_boa_modelled, marker='s', color='red', label='Calculated Diffuse Radiance')
 	ax1.plot(wuttke_wav, wuttke_boa_measured, marker='s', color='blue', label='Measured Diffuse Radiance')
 	ax1.set_yscale('log')
@@ -45,11 +46,11 @@ if plot_wuttke:
 	ax1.set_xlabel('nm')
 	ax1.set_ylabel('erg/s/cm2/nm')
 	ax1.legend(loc=0)
-	ax2.plot(wuttke_wav, (wuttke_boa_measured-wuttke_boa_modelled)/(wuttke_toa_modelled), marker='s', color='black', label='(Measured BOA-Modelled BOA)/TOA')
+	ax2.plot(wuttke_wav, (wuttke_boa_measured-wuttke_boa_modelled)/(wuttke_toa_modelled), marker='s', color='black')
 	ax2.set_xlabel('nm')
+	ax2.set_ylabel('(Measured BOA-Modelled BOA)/TOA')
 	ax2.set_yscale('linear')
 	ax2.set_ylim([-0.3,.3])
-	ax2.legend(loc=0)
 
 	plt.savefig('./Plots/reproduce_wuttke_paper.eps', orientation='portrait',papertype='letter', format='eps')
 
@@ -62,6 +63,7 @@ if plot_woudc:
 	kerr_boa_measured=importeddata[:,5] #bottom-of-atmosphere measured flux, erg/s/nm/cm2
 
 	fig1, (ax1, ax2)=plt.subplots(2, figsize=(12,10), sharex=True)
+	ax1.set_title('Reproduction of WOUDC Surface Flux Measurements')
 	ax1.plot(kerr_wav, kerr_toa_modelled, marker='s', color='black', label='TOA Flux')
 	ax1.plot(kerr_wav, kerr_boa_modelled, marker='s', color='red', label='Calculated BOA Flux')
 	ax1.plot(kerr_wav, kerr_boa_measured, marker='s', color='blue', label='Measured BOA Flux')
@@ -71,11 +73,11 @@ if plot_woudc:
 	ax1.set_xlabel('nm')
 	ax1.set_ylabel('erg/s/cm2/nm')
 	ax1.legend(loc=0)
-	ax2.plot(kerr_wav, (kerr_boa_measured-kerr_boa_modelled)/(kerr_toa_modelled), marker='s', color='black', label='(Measured BOA-Modelled BOA)/TOA')
+	ax2.plot(kerr_wav, (kerr_boa_measured-kerr_boa_modelled)/(kerr_toa_modelled), marker='s', color='black')
 	ax2.set_xlabel('nm')
+	ax2.set_ylabel('(Measured BOA-Modelled BOA)/TOA')
 	ax2.set_yscale('linear')
 	ax2.set_ylim([-0.30,.30])
-	ax2.legend(loc=0)
 
 	plt.savefig('./Plots/reproduce_woudc_paper.eps', orientation='portrait',papertype='letter', format='eps')
 plt.show()

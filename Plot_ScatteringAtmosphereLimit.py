@@ -20,7 +20,7 @@ def cm2inch(cm): #function to convert cm to inches; useful for complying with As
 ###A=0
 ########################
 ###z=0
-fnetdict=pickle.load(open('./TwoStreamOutput/rugheimer_earth_epoch0_w0=0.999_a=0_z=0.p','rb'))
+fnetdict=pickle.load(open('./TwoStreamOutput/rugheimer_earth_epoch0_w0=1-1e-12_a=0_z=0.p','rb'))
 F_net=fnetdict['F_net'] #net flux in each layer, 0th layer is TOA, erg/s/cm2/nm
 wav_leftedges=fnetdict['wav_leftedges'] #nm
 wav_rightedges=fnetdict['wav_rightedges'] #nm
@@ -49,7 +49,7 @@ F_net_deviation_max_normalized_0_0=F_net_deviation_max/(direct_flux_toa)
 F_net_deviation_stddevs_normalized_0_0=F_net_deviation_stddevs/(direct_flux_toa)
 
 ###z=60
-fnetdict=pickle.load(open('./TwoStreamOutput/rugheimer_earth_epoch0_w0=0.999_a=0_z=60.p','rb'))
+fnetdict=pickle.load(open('./TwoStreamOutput/rugheimer_earth_epoch0_w0=1-1e-12_a=0_z=60.p','rb'))
 F_net=fnetdict['F_net'] #net flux in each layer, 0th layer is TOA, erg/s/cm2/nm
 wav_leftedges=fnetdict['wav_leftedges'] #nm
 wav_rightedges=fnetdict['wav_rightedges'] #nm
@@ -76,7 +76,7 @@ F_net_deviation_max_normalized_0_60=F_net_deviation_max/(direct_flux_toa)
 F_net_deviation_stddevs_normalized_0_60=F_net_deviation_stddevs/(direct_flux_toa)
 
 ###z=85
-fnetdict=pickle.load(open('./TwoStreamOutput/rugheimer_earth_epoch0_w0=0.999_a=0_z=85.p','rb'))
+fnetdict=pickle.load(open('./TwoStreamOutput/rugheimer_earth_epoch0_w0=1-1e-12_a=0_z=85.p','rb'))
 F_net=fnetdict['F_net'] #net flux in each layer, 0th layer is TOA, erg/s/cm2/nm
 wav_leftedges=fnetdict['wav_leftedges'] #nm
 wav_rightedges=fnetdict['wav_rightedges'] #nm
@@ -106,7 +106,7 @@ F_net_deviation_stddevs_normalized_0_85=F_net_deviation_stddevs/(direct_flux_toa
 ###A=0.20
 ########################
 ###z=0
-fnetdict=pickle.load(open('./TwoStreamOutput/rugheimer_earth_epoch0_w0=0.999_a=0.2_z=0.p','rb'))
+fnetdict=pickle.load(open('./TwoStreamOutput/rugheimer_earth_epoch0_w0=1-1e-12_a=0.2_z=0.p','rb'))
 F_net=fnetdict['F_net'] #net flux in each layer, 0th layer is TOA, erg/s/cm2/nm
 wav_leftedges=fnetdict['wav_leftedges'] #nm
 wav_rightedges=fnetdict['wav_rightedges'] #nm
@@ -133,7 +133,7 @@ F_net_deviation_max_normalized_p245_0=F_net_deviation_max/(direct_flux_toa)
 F_net_deviation_stddevs_normalized_p245_0=F_net_deviation_stddevs/(direct_flux_toa)
 
 ###z=60
-fnetdict=pickle.load(open('./TwoStreamOutput/rugheimer_earth_epoch0_w0=0.999_a=0.2_z=60.p','rb'))
+fnetdict=pickle.load(open('./TwoStreamOutput/rugheimer_earth_epoch0_w0=1-1e-12_a=0.2_z=60.p','rb'))
 F_net=fnetdict['F_net'] #net flux in each layer, 0th layer is TOA, erg/s/cm2/nm
 wav_leftedges=fnetdict['wav_leftedges'] #nm
 wav_rightedges=fnetdict['wav_rightedges'] #nm
@@ -160,7 +160,7 @@ F_net_deviation_max_normalized_p245_60=F_net_deviation_max/(direct_flux_toa)
 F_net_deviation_stddevs_normalized_p245_60=F_net_deviation_stddevs/(direct_flux_toa)
 
 ###z=85
-fnetdict=pickle.load(open('./TwoStreamOutput/rugheimer_earth_epoch0_w0=0.999_a=0.2_z=85.p','rb'))
+fnetdict=pickle.load(open('./TwoStreamOutput/rugheimer_earth_epoch0_w0=1-1e-12_a=0.2_z=85.p','rb'))
 F_net=fnetdict['F_net'] #net flux in each layer, 0th layer is TOA, erg/s/cm2/nm
 wav_leftedges=fnetdict['wav_leftedges'] #nm
 wav_rightedges=fnetdict['wav_rightedges'] #nm
@@ -190,7 +190,7 @@ F_net_deviation_stddevs_normalized_p245_85=F_net_deviation_stddevs/(direct_flux_
 ###A=1
 ########################
 ###z=0
-fnetdict=pickle.load(open('./TwoStreamOutput/rugheimer_earth_epoch0_w0=0.999_a=1_z=0.p','rb'))
+fnetdict=pickle.load(open('./TwoStreamOutput/rugheimer_earth_epoch0_w0=1-1e-12_a=1_z=0.p','rb'))
 F_net=fnetdict['F_net'] #net flux in each layer, 0th layer is TOA, erg/s/cm2/nm
 wav_leftedges=fnetdict['wav_leftedges'] #nm
 wav_rightedges=fnetdict['wav_rightedges'] #nm
@@ -217,7 +217,7 @@ F_net_deviation_max_normalized_1_0=F_net_deviation_max/(direct_flux_toa)
 F_net_deviation_stddevs_normalized_1_0=F_net_deviation_stddevs/(direct_flux_toa)
 #pdb.set_trace()
 ###z=60
-fnetdict=pickle.load(open('./TwoStreamOutput/rugheimer_earth_epoch0_w0=0.999_a=1_z=0.p','rb'))
+fnetdict=pickle.load(open('./TwoStreamOutput/rugheimer_earth_epoch0_w0=1-1e-12_a=1_z=60.p','rb'))
 F_net=fnetdict['F_net'] #net flux in each layer, 0th layer is TOA, erg/s/cm2/nm
 wav_leftedges=fnetdict['wav_leftedges'] #nm
 wav_rightedges=fnetdict['wav_rightedges'] #nm
@@ -244,7 +244,7 @@ F_net_deviation_max_normalized_1_60=F_net_deviation_max/(direct_flux_toa)
 F_net_deviation_stddevs_normalized_1_60=F_net_deviation_stddevs/(direct_flux_toa)
 
 ###z=85
-fnetdict=pickle.load(open('./TwoStreamOutput/rugheimer_earth_epoch0_w0=0.999_a=1_z=85.p','rb'))
+fnetdict=pickle.load(open('./TwoStreamOutput/rugheimer_earth_epoch0_w0=1-1e-12_a=1_z=85.p','rb'))
 F_net=fnetdict['F_net'] #net flux in each layer, 0th layer is TOA, erg/s/cm2/nm
 wav_leftedges=fnetdict['wav_leftedges'] #nm
 wav_rightedges=fnetdict['wav_rightedges'] #nm
@@ -282,7 +282,7 @@ ax0.plot(wav_centers, F_net_deviation_max_normalized_0_0,  marker='o', markersiz
 ax0.plot(wav_centers, F_net_deviation_max_normalized_p245_0,  marker='o', markersize=markersizeval, linewidth=1, color='blue', label='A=0.2')
 ax0.plot(wav_centers, F_net_deviation_max_normalized_1_0,  marker='o', markersize=markersizeval, linewidth=1, color='red', label='A=1')
 ax0.set_yscale('log')
-ax0.set_ylim([1.e-5, 1e0])
+ax0.set_ylim([1.e-14, 1e-5])
 ax0.set_ylabel('Maximum Fractional Columnar\nDeviation of $F_{net}$ from Median ')
 #ax0.legend(loc=0, fontsize=10)
 ax0.set_xlim([130, 855])
@@ -293,7 +293,7 @@ ax1.plot(wav_centers, F_net_deviation_max_normalized_0_60,  marker='o', markersi
 ax1.plot(wav_centers, F_net_deviation_max_normalized_p245_60,  marker='o', markersize=markersizeval, linewidth=1, color='blue', label='A=0.2')
 ax1.plot(wav_centers, F_net_deviation_max_normalized_1_60,  marker='o', markersize=markersizeval, linewidth=1, color='red', label='A=1')
 ax1.set_yscale('log')
-ax1.set_ylim([1.e-5, 1e0])
+ax1.set_ylim([1.e-14, 1e-5])
 ax1.set_ylabel('Maximum Fractional Columnar\nDeviation of $F_{net}$ from Median')
 #ax1.legend(loc=0, fontsize=10)
 ax1.set_xlim([130, 855])
@@ -304,7 +304,7 @@ ax2.plot(wav_centers, F_net_deviation_max_normalized_0_85,  marker='o', markersi
 ax2.plot(wav_centers, F_net_deviation_max_normalized_p245_85,  marker='o', markersize=markersizeval, linewidth=1, color='blue', label='A=0.2')
 ax2.plot(wav_centers, F_net_deviation_max_normalized_1_85,  marker='o', markersize=markersizeval, linewidth=1, color='red', label='A=1')
 ax2.set_yscale('log')
-ax2.set_ylim([1.e-5, 1e0])
+ax2.set_ylim([1.e-14, 1e-5])
 ax2.set_ylabel('Maximum Fractional Columnar\nDeviation of $F_{net}$ from Median')
 #ax2.legend(loc=0, fontsize=10)
 ax2.set_xlabel('nm')

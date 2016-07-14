@@ -279,8 +279,7 @@ def produce_absorption_spectra(molecule):
 		Primary Sequence
 		6.2-118.08 nm: Chan et al (1993)
 		121-198 nm: JPL recommendation, compiled primarily from Yoshino et al (1996-7) and Parkinson & Yoshino (2003). They define their cross-sections via Beer-Lambert law, meaning they are measuring total extinction. 298 K.
-		198-289 nm: assumed to be purely Rayleigh scattering
-		290-350 nm: Du et al (2013). Measurements for water vapor. Measured using cavity ring-down spectroscopy. Reading article, cross-sections seem to be total, but scattering v. small. 293 K.
+		198-396 nm: assumed to be purely Rayleigh scattering
 		396-755 nm: Coheur (2002)/Fally(2003). Work seems to be based on gas-cell absorption so should be for total cross-section. 
 		775-1081 nm: Merienne (2003). Again seems to be gas-cell absorption work, so should be total cross-section. 
 
@@ -298,15 +297,7 @@ def produce_absorption_spectra(molecule):
 		data=np.genfromtxt('/home/sranjan/Atmospheric_Molecules/H2O/H2O_JPL-2010(2011)_298K_121-198nm(rec).txt', skip_header=0, skip_footer=0)
 		jpl_wav=data[:,0] #wavelengths in nm
 		jpl_xc=data[:,1] #cross-sections in cm2
-
-		rayleigh_wav_1=np.arange(199., 289.1, step=0.1)#No absorption data; assume Rayleigh-dominated
-
-		
-		data=np.genfromtxt('/home/sranjan/Atmospheric_Molecules/H2O/Du_2013_293K_water_vapor_totalxc.dat', skip_header=3, skip_footer=0)
-		du_wav=data[:,0] #wavelengths in nm
-		du_xc=data[:,1] #cross-sections in cm2
-		rayleigh_wav_2=np.arange(351., 396.1, step=0.1)#No absorption data; assume Rayleigh-dominated
-
+		rayleigh_wav_1=np.arange(199., 396.1, step=0.1)#No absorption data; assume Rayleigh-dominated
 		
 		data=np.genfromtxt('/home/sranjan/Atmospheric_Molecules/H2O/H2O_Coheur(2002),Fally(2003)_290K_396-755nm(line intensities).txt', skip_header=0, skip_footer=0)
 		coheurfally_wav=data[:,0] #wavelengths in nm
@@ -325,18 +316,17 @@ def produce_absorption_spectra(molecule):
 		merienne_xc=data[:,1] #cross-sections in cm2
 
 		#Form unified dataset
-		wav=np.concatenate((chan_wav, jpl_wav,rayleigh_wav_1, du_wav, rayleigh_wav_2, coheurfally_wav,rayleigh_wav_3, merienne_wav,rayleigh_cf_wav_1,rayleigh_cf_wav_2,rayleigh_cf_wav_3)) #wavelength axis in nm. Spacing between datasets is small enough that we are for the time being not padding the data with Rayleigh-dominated wavelengths.	
+		wav=np.concatenate((chan_wav, jpl_wav,rayleigh_wav_1, coheurfally_wav,rayleigh_wav_3, merienne_wav,rayleigh_cf_wav_1,rayleigh_cf_wav_2,rayleigh_cf_wav_3)) #wavelength axis in nm. Spacing between datasets is small enough that we are for the time being not padding the data with Rayleigh-dominated wavelengths.	
 		
 		#Compute Rayleigh scattering
 		rayleigh_xc=rayleigh_scattering(wav, 'h2o') #extinction due to Rayleigh scattering (cm2)
 		rayleigh_xc_blk1=rayleigh_scattering(rayleigh_wav_1, 'h2o')
-		rayleigh_xc_blk2=rayleigh_scattering(rayleigh_wav_2, 'h2o')		
 		rayleigh_xc_blk3=rayleigh_scattering(rayleigh_wav_3, 'h2o')
 		rayleigh_cf_xc_1=rayleigh_scattering(rayleigh_cf_wav_1, 'h2o')
 		rayleigh_cf_xc_2=rayleigh_scattering(rayleigh_cf_wav_2, 'h2o')
 		rayleigh_cf_xc_3=rayleigh_scattering(rayleigh_cf_wav_3, 'h2o')
 		
-		tot_xc=np.concatenate((chan_xc, jpl_xc, rayleigh_xc_blk1, du_xc,rayleigh_xc_blk2, coheurfally_xc,rayleigh_xc_blk3, merienne_xc,rayleigh_cf_xc_1,rayleigh_cf_xc_2,rayleigh_cf_xc_3)) #total scattering (rayleigh+abs), formed by concatenating Au et al (1994) and the Rayleigh scattering model, in cm2/molecule
+		tot_xc=np.concatenate((chan_xc, jpl_xc, rayleigh_xc_blk1, coheurfally_xc,rayleigh_xc_blk3, merienne_xc,rayleigh_cf_xc_1,rayleigh_cf_xc_2,rayleigh_cf_xc_3)) #total scattering (rayleigh+abs), formed by concatenating Au et al (1994) and the Rayleigh scattering model, in cm2/molecule
 		
 		sortinds=np.argsort(wav)
 		wav=wav[sortinds]
@@ -769,7 +759,7 @@ def produce_absorption_spectra(molecule):
 
 ###Uncomment a line to produce the relevant action spectrum.
 #produce_absorption_spectra('n2')
-#produce_absorption_spectra('co2') 
+produce_absorption_spectra('co2') 
 #produce_absorption_spectra('h2o')
 #produce_absorption_spectra('ch4')
 #produce_absorption_spectra('so2')
