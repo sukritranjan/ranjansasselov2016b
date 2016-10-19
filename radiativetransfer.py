@@ -28,43 +28,40 @@ amu2g=1.66054e-24 #1 amu in g
 ########################
 ###User-set parameters
 ########################
-multiples=np.array([0., 1.e-6, 1.e-5, 1.e-4, 1.e-3, 1.e-2, 1.e-1, 1., 1.e1, 1.e2, 1.e3, 1.33, 46.6, 470., .6, 8.93e-3]) #values we will be scaling the CO2 column by 
-multiple=str(multiples[10])
-
-filename='/CO2lim/surface_intensities_co2limits_co2multiple='+multiple+'_a=newsnow_z=0' #name of file to write output, plot to
+filename='rugheimer_earth_modern_rugheimerxcs' #name of file to write output, plot to
 
 #TOA input, and comparison file.
-inputspectrafile='./LiteratureSpectra/general_spectral_input.dat' #TOA Stellar Input and Reference Spectra for Comparison
+inputspectrafile='./LiteratureSpectra/rugheimer_earth_modern.dat' #TOA Stellar Input and Reference Spectra for Comparison
 
 #Mixing ratio file
 N_species=8 #how many gas species are in our model?
-mr_profilefile='./MixingRatios/CO2lim/rugheimer_earth_epoch0_mixingratios_co2limits_co2multiple='+multiple+'.dat' #Mixing ratio file
+mr_profilefile='./MixingRatios/rugheimer_earth_modern_mixingratios_v2.dat' #Mixing ratio file
 
 #T/P Profile.
-atmoprofilefile='./TPProfiles/CO2lim/rugheimer_earth_epoch0_atmosphereprofile_co2limits_co2multiple='+multiple+'.dat' #T/P Profile File. File boundaries should match z_lower and z_upper
+atmoprofilefile='./TPProfiles/rugheimer_earth_modern_atmosphereprofile.dat' #T/P Profile File. File boundaries should match z_lower and z_upper
 
 #RT model layers
 z_upper_limit=64.e5 #Upper edge of the atmospheric layers, in cm. The bottom edge of the layers is assumed to be at 0.
 z_step=1.e5 # Thickness of the atmospheric layers, in cm.
 
 ###Solar Zenith Angle
-solarzenithangle=0*np.pi/180. #
+solarzenithangle=60.*np.pi/180. #60 degrees (pi/3) used by Rugheimer et al in their paper.
 
 ###Albedo
 #Uniform albedo: set flag to 'uniformalbedo' and set the subsequent albedo value
 #Nonuniform albedo: set flag to 'nonuniformalbedo' and choose what mix of surface: ocean, old snow, new snow, desert, tundra. 
 #set flag to 'plot' to plot albedo used. 
-albedoflag='nonuniformalbedo' #value of 'nonuniformalbedo' or 'uniformalbedo'
-uniformalbedo=0. #if adopting uniform albedo: what value?
+albedoflag='uniformalbedo' #value of 'nonuniformalbedo' or 'uniformalbedo'
+uniformalbedo=0.15 #if adopting uniform albedo: what value?
 frac_ocean=0. #if nonuniform albedo: what fraction of ground is ocean?
 frac_tundra=0. #if nonuniform albedo: what fraction of ground is tundra?
 frac_desert=0. #if nonuniform albedo: what fraction of ground is desert?
 frac_oldsnow=0.#if nonuniform albedo: what fraction of ground is old snow?
-frac_newsnow=1. #if nonuniform albedo: what fraction of ground is new snow?
-
+frac_newsnow=0. #if nonuniform albedo: what fraction of ground is new snow?
 
 ###Temperature of Ground
-temp_ground=292.5 #Temperature of the ground in K
+temp_ground=288. #Temperature of the ground in K.
+
 ########################
 ###Set output file names
 ########################
@@ -125,29 +122,29 @@ xc_abs_species_wav=np.zeros([N_species,N_wavelengths])
 #Load in band-averaged cross-sections.  
 #Function called returns xc in cm2/molecule in each band (total extinction, absorption, and rayleigh scattering). tot=abs+ray.
 
-(xc_tot_species_wav[0,:], xc_abs_species_wav[0,:], xc_scat_species_wav[0,:])=css.compute_band_cross_section(wav_leftedges, wav_rightedges, 'n2')
-(xc_tot_species_wav[1,:], xc_abs_species_wav[1,:], xc_scat_species_wav[1,:])=css.compute_band_cross_section(wav_leftedges, wav_rightedges, 'co2')
-(xc_tot_species_wav[2,:], xc_abs_species_wav[2,:], xc_scat_species_wav[2,:])=css.compute_band_cross_section(wav_leftedges, wav_rightedges, 'h2o')
-(xc_tot_species_wav[3,:], xc_abs_species_wav[3,:], xc_scat_species_wav[3,:])=css.compute_band_cross_section(wav_leftedges, wav_rightedges, 'ch4')
+#(xc_tot_species_wav[0,:], xc_abs_species_wav[0,:], xc_scat_species_wav[0,:])=css.compute_band_cross_section(wav_leftedges, wav_rightedges, 'n2')
+#(xc_tot_species_wav[1,:], xc_abs_species_wav[1,:], xc_scat_species_wav[1,:])=css.compute_band_cross_section(wav_leftedges, wav_rightedges, 'co2')
+#(xc_tot_species_wav[2,:], xc_abs_species_wav[2,:], xc_scat_species_wav[2,:])=css.compute_band_cross_section(wav_leftedges, wav_rightedges, 'h2o')
+#(xc_tot_species_wav[3,:], xc_abs_species_wav[3,:], xc_scat_species_wav[3,:])=css.compute_band_cross_section(wav_leftedges, wav_rightedges, 'ch4')
 (xc_tot_species_wav[4,:], xc_abs_species_wav[4,:], xc_scat_species_wav[4,:])=css.compute_band_cross_section(wav_leftedges, wav_rightedges, 'so2')
-(xc_tot_species_wav[5,:], xc_abs_species_wav[5,:], xc_scat_species_wav[5,:])=css.compute_band_cross_section(wav_leftedges, wav_rightedges, 'o2')
-(xc_tot_species_wav[6,:], xc_abs_species_wav[6,:], xc_scat_species_wav[6,:])=css.compute_band_cross_section(wav_leftedges, wav_rightedges, 'o3')
-(xc_tot_species_wav[7,:], xc_abs_species_wav[7,:], xc_scat_species_wav[7,:])=css.compute_band_cross_section(wav_leftedges, wav_rightedges, 'h2s')
+#(xc_tot_species_wav[5,:], xc_abs_species_wav[5,:], xc_scat_species_wav[5,:])=css.compute_band_cross_section(wav_leftedges, wav_rightedges, 'o2')
+#(xc_tot_species_wav[6,:], xc_abs_species_wav[6,:], xc_scat_species_wav[6,:])=css.compute_band_cross_section(wav_leftedges, wav_rightedges, 'o3')
+#(xc_tot_species_wav[7,:], xc_abs_species_wav[7,:], xc_scat_species_wav[7,:])=css.compute_band_cross_section(wav_leftedges, wav_rightedges, 'h2s')
 
 #Note that in some cases, the predicted Rayleigh scattering cross-section exceeds that measured in laboratory studies. This means that 1) the single-scattering albedo w_0>1 in these cases and 2) the absorption cross-section is negative (both unphysical). This is accounted for in compute_optical_parameters, where w_0 is set to a maximum of 0.999. The only parameters used in the radiative transfer are w_0 and tau_tot, so the negative absorption cross-sections never come into play. 
 
 
-#######Try Rugheimer cross-sections and scattering instead
-######(xc_tot_species_wav[0,:], xc_abs_species_wav[0,:], xc_scat_species_wav[0,:])=css.get_rugheimer_xc(wav_leftedges, wav_rightedges, 'n2',0.78, 0.)
-#######(xc_tot_species_wav[0,:], xc_abs_species_wav[0,:], xc_scat_species_wav[0,:])=css.get_rugheimer_xc(wav_leftedges, wav_rightedges, 'n2',0.89, 0.1)
-######(xc_tot_species_wav[1,:], xc_abs_species_wav[1,:], xc_scat_species_wav[1,:])=css.get_rugheimer_xc(wav_leftedges, wav_rightedges, 'co2',0,0)
-######(xc_tot_species_wav[2,:], xc_abs_species_wav[2,:], xc_scat_species_wav[2,:])=css.get_rugheimer_xc(wav_leftedges, wav_rightedges, 'h2o',0,0)
-######(xc_tot_species_wav[4,:], xc_abs_species_wav[4,:], xc_scat_species_wav[4,:])=css.get_rugheimer_xc(wav_leftedges, wav_rightedges, 'so2',0,0)
-######(xc_tot_species_wav[5,:], xc_abs_species_wav[5,:], xc_scat_species_wav[5,:])=css.get_rugheimer_xc(wav_leftedges, wav_rightedges, 'o2',0,0)
-######(xc_tot_species_wav[6,:], xc_abs_species_wav[6,:], xc_scat_species_wav[6,:])=css.get_rugheimer_xc(wav_leftedges, wav_rightedges, 'o3',0,0)
-#######Rugheimer has no CH4 or H2S so we keep our own, but get rid of the scattering formalism 
-######xc_scat_species_wav[3,:]=xc_scat_species_wav[3,:]*0.0
-######xc_scat_species_wav[7,:]=xc_scat_species_wav[7,:]*0.0
+#Try Rugheimer cross-sections and scattering instead
+(xc_tot_species_wav[0,:], xc_abs_species_wav[0,:], xc_scat_species_wav[0,:])=css.get_rugheimer_xc(wav_leftedges, wav_rightedges, 'n2',0.78, 0.)
+#(xc_tot_species_wav[0,:], xc_abs_species_wav[0,:], xc_scat_species_wav[0,:])=css.get_rugheimer_xc(wav_leftedges, wav_rightedges, 'n2',0.89, 0.1)
+(xc_tot_species_wav[1,:], xc_abs_species_wav[1,:], xc_scat_species_wav[1,:])=css.get_rugheimer_xc(wav_leftedges, wav_rightedges, 'co2',0,0)
+(xc_tot_species_wav[2,:], xc_abs_species_wav[2,:], xc_scat_species_wav[2,:])=css.get_rugheimer_xc(wav_leftedges, wav_rightedges, 'h2o',0,0)
+#(xc_tot_species_wav[4,:], xc_abs_species_wav[4,:], xc_scat_species_wav[4,:])=css.get_rugheimer_xc(wav_leftedges, wav_rightedges, 'so2',0,0)
+(xc_tot_species_wav[5,:], xc_abs_species_wav[5,:], xc_scat_species_wav[5,:])=css.get_rugheimer_xc(wav_leftedges, wav_rightedges, 'o2',0,0)
+(xc_tot_species_wav[6,:], xc_abs_species_wav[6,:], xc_scat_species_wav[6,:])=css.get_rugheimer_xc(wav_leftedges, wav_rightedges, 'o3',0,0)
+#Rugheimer has no CH4 or H2S so we keep our own, but get rid of the scattering formalism 
+xc_scat_species_wav[3,:]=xc_scat_species_wav[3,:]*0.0
+xc_scat_species_wav[7,:]=xc_scat_species_wav[7,:]*0.0
 
 ########################
 ###Get atmospheric layers column densities
