@@ -769,16 +769,45 @@ def produce_rayleigh_scattering(mol):
     """
     To output file with Rayleigh scattering calculated for Ar, possibly H2. This is in aid of Alexander Fateev
     """
-    wavelengths=np.arange(100.0, 300.1, step=0.1)
+    wavelengths=np.arange(100.0, 700.1, step=0.1) #nm
+    vardavascarver_rayleigh=rayleigh_scattering(wavelengths, mol) #cm**-2
+    
+    
+    ###Use formalism of Wilmouth+2020 for Ar
+    N=2.5469E19 #cm**-3; Table 1 of Wilmouth+2020
+    KCF=1.0 #King Correction factor for Ar. Table 1 of Wilmouth+2020
+    wavenumbers=(1.0/wavelengths)*1.0E7 #convert wavelengths in nm to wavenumber in cm
+    nminusone=1.0E-8*(6432.135 + 2.8606021E14/(1.44E10-wavenumbers**2.0))
+    n=nminusone+1
+    wilmouth_rayleigh=(24.0*np.pi**3.0*wavenumbers**4.0/N**2.0)*KCF*((n**2.0-1.0)/(n**2.0+2.0))**2.0
+    
+    
+    fig1, ax1=plt.subplots(1, figsize=(8, 6))
+    ax1.plot(wavelengths,wilmouth_rayleigh, marker='D', markersize=1, markeredgecolor='black',  color='black', linestyle='-', label='Wilmouth+2020')
+
+    ax1.plot(wavelengths,vardavascarver_rayleigh, marker='D', markersize=1, markeredgecolor='green',  color='green', linestyle='-', label='Vardavas+1984')
+
+    ax1.plot(np.array([370.0, 405.8, 532.2, 660.0]), np.array([20.23E-27, 14.02E-27, 4.576E-27, 1.912E-27]), marker='o', markersize=6, color='red', linestyle='None', label='Thalman+2014')
+    ax1.plot(np.array([532.2]), np.array([4.45E-27]), marker='o', markersize=6, color='blue', linestyle='None', label='Sneep+2005')
+
+    # ax1.set_xlim([100., 900.])
+    # ax1.set_ylim([1.e-27, 1.e-15])
+    ax1.set_yscale('log')
+    ax1.legend(loc=0)
+    ax1.set_ylabel(r'Rayleigh Scattering Cross-Section (cm$^2$/molecule)')
+    ax1.set_xlabel('Wavelength (nm)')
+
+    plt.savefig('./Plots/xc_'+mol+'.pdf', orientation='portrait', format='pdf')
+    plt.show()
+    
+    
     toprint=np.zeros([len(wavelengths), 2])
     toprint[:,0]=wavelengths
-    toprint[:,1]=rayleigh_scattering(wavelengths, mol)
-    
+    toprint[:,1]=rayleigh_scattering(wavelengths, mol) #cm**-2
     header='Wavelength (nm)     Rayleigh Scattering XC (cm2/molecule)\n'
-    
     f=open('./XCs/'+mol+'_rayleigh.dat', 'w')
     f.write(header)
     np.savetxt(f, toprint, delimiter='        ', fmt='%1.7e', newline='\n')
     f.close()
-    
+
 produce_rayleigh_scattering('ar')
